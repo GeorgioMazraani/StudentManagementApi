@@ -1,4 +1,6 @@
 import { MongoClient } from "mongodb";
+import { ObjectId } from 'mongodb';
+
 
 export async function connectToDB(uri) {
     try {
@@ -15,16 +17,19 @@ async function createStudentDocument(collection, studentObj) {
 }
 
 async function findStudentById(collection, id) {
-    return collection.find(id).toArray();
+    return collection.find({ _id: new ObjectId(id) }).toArray();
 }
-async function updateStudentByName(collection, name, updateFields) {
-    await collection.updateMany(
-        { name },
+
+
+async function updateStudentById(collection, id, updateFields) {
+    await collection.updateOne(
+        { _id: new ObjectId(id) },
         { $set: updateFields }
-    )
+    );
 }
+
 async function deleteStudentById(collection, id) {
-    await collection.deleteOne(id);
+    collection.deleteOne({ _id: new ObjectId(id) });
 }
 
 export async function insertStudent(studentObj) {
@@ -40,8 +45,11 @@ export async function updateStudent(studentObj) {
     let mongoClient = await connectToDB(uri);
     const db = mongoClient.db('school');
     const collection = db.collection('students');
-    await updateStudentByName(collection, studentObj.name, studentObj);
+
+    const { id, ...updateFields } = studentObj;
+    await updateStudentById(collection, id, updateFields);
 }
+
 export async function readStudent(id) {
     const uri = process.env.DB_URI;
     let mongoClient;
@@ -50,11 +58,13 @@ export async function readStudent(id) {
     const collection = db.collection('students');
     return await findStudentById(collection, id);
 }
-export async function removeStudent(stdID) {
+
+export async function removeStudent(id) {
     const uri = process.env.DB_URI;
-    let mongoClient;
-    mongoClient = await connectToDB(uri);
+    let mongoClient = await connectToDB(uri);
     const db = mongoClient.db('school');
     const collection = db.collection('students');
-    await deleteStudentById(collection, stdID);
+
+    await deleteStudentById(collection, id);
 }
+

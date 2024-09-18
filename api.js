@@ -16,22 +16,44 @@ app.use(cors({
 
 
 app.get("/readStudent", async (req, res) => {
-    let data = await readStudent(req.body.stdId);
-    res.status(200).json(data);
+    const { id } = req.query;
+    if (!id) {
+        return res.status(400).json({ message: 'Student ID is required' });
+    }
+    let data = await readStudent(id);
+    if (data) {
+        res.status(200).json(data);
+    } else {
+        res.status(404).json({ message: 'Student not found' });
+    }
 });
+
 
 app.post('/addStudent', async (req, res) => {
     let student = req.body;
     await insertStudent(student);
     res.status(201).json({ message: 'Student added successfully', student });
 })
-app.put('/updateStudent', async (req, res) => {
-    await updateStudent(req.body);
-    res.send('updated');
-})
-app.delete('/removeStudent', async (req, res) => {
-    await removeStudent(req.body.stdId);
-    res.send('deleted');
-})
+
+app.put("/updateStudent", async (req, res) => {
+    const { id } = req.query;  // Extract id from query
+    const updateFields = req.body;
+    if (!id) {
+        return res.status(400).json({ message: 'Student ID is required' });
+    }
+    await updateStudent({ id, ...updateFields });
+    res.status(200).send('Updated Successfully!');
+
+});
+app.delete("/removeStudent", async (req, res) => {
+    const { id } = req.query;
+    if (!id) {
+        return res.status(400).json({ message: 'Student ID is required' });
+    }
+    await removeStudent(id);
+    res.status(200).send('Deleted Successfully!');
+
+});
+
 
 app.listen(process.env.PORT);
