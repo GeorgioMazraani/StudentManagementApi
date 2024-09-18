@@ -23,8 +23,8 @@ async function updateStudentByName(collection, name, updateFields) {
         { $set: updateFields }
     )
 }
-async function deleteStudentByName(collection, name) {
-    await collection.deleteOne(name);
+async function deleteStudentByName(collection, id) {
+    await collection.deleteOne(id);
 }
 
 export async function insertStudent(studentObj) {

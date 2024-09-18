@@ -5,7 +5,7 @@ import { insertStudent, removeStudent, updateStudent, readStudent } from './src/
 
 config();
 
-const app = express();
+var app = express();
 app.use(express.json());
 
 app.use(cors({
