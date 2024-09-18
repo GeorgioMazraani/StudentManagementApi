@@ -1,7 +1,7 @@
 import express from 'express';
 import { config } from 'dotenv';
 import cors from 'cors';
-import { insertStudent, removeStudent, updateStudent, readStudent } from './src/studentCrud.js'
+import { insertStudent, removeStudent, updateStudent, readStudent, readAllStudents } from './src/studentCrud.js'
 
 config();
 
@@ -27,6 +27,12 @@ app.get("/readStudent", async (req, res) => {
         res.status(404).json({ message: 'Student not found' });
     }
 });
+
+app.get("/readAllStudents", async (req, res) => {
+    let data = await readAllStudents();
+    res.status(200).json(data);
+});
+
 
 
 app.post('/addStudent', async (req, res) => {

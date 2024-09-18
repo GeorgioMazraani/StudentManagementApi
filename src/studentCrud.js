@@ -58,6 +58,19 @@ export async function readStudent(id) {
     const collection = db.collection('students');
     return await findStudentById(collection, id);
 }
+async function findAllStudents(collection) {
+    return await collection.find({}).toArray();
+}
+
+
+export async function readAllStudents() {
+    const uri = process.env.DB_URI;
+    let mongoClient;
+    mongoClient = await connectToDB(uri);
+    const db = mongoClient.db('school');
+    const collection = db.collection('students');
+    return await findAllStudents(collection);
+}
 
 export async function removeStudent(id) {
     const uri = process.env.DB_URI;
