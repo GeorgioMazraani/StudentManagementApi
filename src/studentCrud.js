@@ -14,8 +14,8 @@ async function createStudentDocument(collection, studentObj) {
     await collection.insertOne(studentObj);
 }
 
-async function findStudentByName(collection, name) {
-    return collection.find(name).toArray();
+async function findStudentById(collection, id) {
+    return collection.find(id).toArray();
 }
 async function updateStudentByName(collection, name, updateFields) {
     await collection.updateMany(
@@ -23,7 +23,7 @@ async function updateStudentByName(collection, name, updateFields) {
         { $set: updateFields }
     )
 }
-async function deleteStudentByName(collection, id) {
+async function deleteStudentById(collection, id) {
     await collection.deleteOne(id);
 }
 
@@ -42,19 +42,19 @@ export async function updateStudent(studentObj) {
     const collection = db.collection('students');
     await updateStudentByName(collection, studentObj.name, studentObj);
 }
-export async function readStudent(name) {
+export async function readStudent(id) {
     const uri = process.env.DB_URI;
     let mongoClient;
     mongoClient = await connectToDB(uri);
     const db = mongoClient.db('school');
     const collection = db.collection('students');
-    return await findStudentByName(collection, name);
+    return await findStudentById(collection, id);
 }
-export async function removeStudent(name) {
+export async function removeStudent(stdID) {
     const uri = process.env.DB_URI;
     let mongoClient;
     mongoClient = await connectToDB(uri);
     const db = mongoClient.db('school');
     const collection = db.collection('students');
-    await deleteStudentByName(collection, name);
+    await deleteStudentById(collection, stdID);
 }

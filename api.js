@@ -16,7 +16,7 @@ app.use(cors({
 
 
 app.get("/readStudent", async (req, res) => {
-    let data = await readStudent(req.body);
+    let data = await readStudent(req.body.stdId);
     res.status(200).json(data);
 });
 
@@ -30,7 +30,7 @@ app.put('/updateStudent', async (req, res) => {
     res.send('updated');
 })
 app.delete('/removeStudent', async (req, res) => {
-    await removeStudent(req.body);
+    await removeStudent(req.body.stdId);
     res.send('deleted');
 })
 
