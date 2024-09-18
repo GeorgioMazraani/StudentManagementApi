@@ -1,7 +1,8 @@
 import express from 'express';
 import { config } from 'dotenv';
+import cors from 'cors';
 import { insertStudent, removeStudent, updateStudent, readStudent } from './src/studentCrud.js'
-var cors = require('cors')
+
 config();
 
 const app = express();
