@@ -1,10 +1,13 @@
 import express from 'express';
 import { config } from 'dotenv';
 import { insertStudent, removeStudent, updateStudent, readStudent } from './src/studentCrud.js'
+var cors = require('cors')
 config();
 
 const app = express();
 app.use(express.json());
+
+app.use(cors())
 
 app.get("/readStudent", async (req, res) => {
     let data = await readStudent(req.body);
